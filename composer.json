@@ -1,0 +1,38 @@
+{
+    "name": "guangda/laravel-sms-notification-channel",
+    "description": "SMS notification channel for Laravel",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sam Chen",
+            "email": "sam.chen@opencart.cn"
+        }
+    ],
+    "require": {
+        "php": ">=7.3",
+        "guzzlehttp/guzzle": "^6.0|^7.0",
+        "illuminate/notifications": "~5.8.0|^6.0|^7.0|^8.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Guangda\\Notifications\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Guangda\\Notifications\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Guangda\\Notifications\\SMSChannelServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
