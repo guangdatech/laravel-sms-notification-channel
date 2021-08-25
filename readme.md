@@ -2,7 +2,7 @@
 
 ### Installation
 ```
-composer require guangda/sms-notification-channel
+composer require guangda/laravel-sms-notification-channel
 ```
 
 ## env 配置
