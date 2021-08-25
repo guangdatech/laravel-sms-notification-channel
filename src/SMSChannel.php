@@ -39,7 +39,7 @@ class SMSChannel
                     'form_params' => [
                         'apikey' => config('sms-notification-channel.yunpian.key'),
                         'mobile' => $to = $this->getTo($notifiable, $notification), // 只支持国内手机号码
-                        'text' => $message->text,
+                        'text' => $message->getText(),
                     ],
                 ]);
                 echo $res->getStatusCode();

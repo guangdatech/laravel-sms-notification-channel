@@ -20,4 +20,18 @@ class SMSMessage
 
         return $this;
     }
+
+    public function getText()
+    {
+        $text = '';
+
+        // 签名
+        if ($signature = config('sms-notification-channel.signature')) {
+            $text .= $signature;
+        }
+
+        $text .= $this->text;
+
+        return $text;
+    }
 }
