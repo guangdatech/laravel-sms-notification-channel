@@ -6,5 +6,10 @@ return [
 
     'yunpian' => [
         'key' => env('SMS_YUNPIAN_KEY'),
-    ]
+    ],
+    'infobip' => [
+        'key' => env('SMS_INFOBIP_KEY'),
+        'secret' => env('SMS_INFOBIP_SECRET'),
+        'url' => env('SMS_INFOBIP_URL'),
+    ],
 ];
