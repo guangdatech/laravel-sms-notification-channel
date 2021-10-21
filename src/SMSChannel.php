@@ -30,12 +30,16 @@ class SMSChannel
             // throw new \Exception('No sms.provider specified');
         }
 
+        $provider = strtolower($provider);
+
         $message = $notification->toSMS($notifiable);
 
         if ($provider == 'yunpian') {
             $this->sendByYunpian($notifiable, $notification, $message);
         } elseif ($provider == 'infobip') {
             $this->sendByInfobip($notifiable, $notification, $message);
+        } elseif ($provider == 'globalsms') {
+            $this->sendByGlobalSms($notifiable, $notification, $message);
         }
     }
 
@@ -104,6 +108,52 @@ class SMSChannel
                 'json' => $body,
             ]);
             echo $res->getStatusCode();
+        } catch (Exception $exception) {
+            throw $exception;
+        }
+    }
+
+    protected function sendByGlobalSms($notifiable, $notification, $message)
+    {
+        // https://www.globalsms.cn/api.html/
+
+        try {
+            $client = new Client();
+
+            $account = config('sms-notification-channel.globalsms.account');
+            $password = config('sms-notification-channel.globalsms.password');
+            $senderId = config('sms-notification-channel.globalsms.sender_id');
+
+            $time = now()->format('YmdHis');
+            $sign = md5($account . $password . $time);
+
+            $url = 'http://sms.skylinelabs.cc:20003/sendsmsV2';
+            $body = [
+                'senderid' => $senderId,
+                'numbers' => $this->getTo($notifiable, $notification),
+                'content' => $message->getText(),
+            ];
+
+            $headers = [
+                'Content-Type' => 'application/json',
+                // 'Content-Length' => strlen(json_encode($body)),
+            ];
+
+            $res = $client->request('POST', $url, [
+                'headers' => $headers,
+                'query' => [
+                    'account' => $account,
+                    'sign' => $sign,
+                    'datetime' => $time,
+                ],
+                'json' => $body,
+            ]);
+
+            $result = json_decode((string)$res->getBody(), true);
+
+            return $result['success'] ?? false;
+
+            return $res->getStatusCode();
         } catch (Exception $exception) {
             throw $exception;
         }
