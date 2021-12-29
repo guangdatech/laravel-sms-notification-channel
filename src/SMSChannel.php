@@ -12,6 +12,7 @@ namespace Guangda\Notifications;
 
 use GuzzleHttp\Client;
 use \Illuminate\Notifications\Notification as Notification;
+use Illuminate\Support\Facades\Log;
 
 class SMSChannel
 {
@@ -31,6 +32,8 @@ class SMSChannel
         }
 
         $provider = strtolower($provider);
+
+        Log::info($provider);
 
         $message = $notification->toSMS($notifiable);
 
@@ -69,6 +72,9 @@ class SMSChannel
                     'text' => $message->getText(),
                 ],
             ]);
+
+            Log::info($res->getBody());
+
             echo $res->getStatusCode();
         } catch (Exception $exception) {
             throw $exception;
@@ -103,10 +109,14 @@ class SMSChannel
                 ],
             ];
 
+            Log::info($headers, $body);
+
             $res = $client->request('POST', $url, [
                 'headers' => $headers,
                 'json' => $body,
             ]);
+
+            Log::info($res->getBody());
             echo $res->getStatusCode();
         } catch (Exception $exception) {
             throw $exception;
@@ -139,6 +149,8 @@ class SMSChannel
                 // 'Content-Length' => strlen(json_encode($body)),
             ];
 
+            Log::info($headers, $body);
+
             $res = $client->request('POST', $url, [
                 'headers' => $headers,
                 'query' => [
@@ -150,6 +162,7 @@ class SMSChannel
             ]);
 
             $result = json_decode((string)$res->getBody(), true);
+            Log::info($result);
 
             return $result['success'] ?? false;
 
